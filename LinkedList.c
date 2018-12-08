@@ -179,7 +179,7 @@ void *test1(void *arg)
 
 	 list_t *list = (list_t *) arg;
 	 int i;
-	 for (i = 0; i < 2000; i++) {
+	 for (i = 0; i < 10000; i++) {
 	 	List_Insert(list, i);
 	 	List_Delete(list, i);	    
 	 }
@@ -193,7 +193,7 @@ void *test2(void *arg)
  {
 	 list_t *list = (list_t *) arg;
 	 int i;
-	 for (i = 0; i < 2000; i++) {
+	 for (i = 0; i < 10000; i++) {
 	    List_Insert2(list, i);
 	 	List_Delete2(list, i);	    
 	 }
@@ -206,27 +206,28 @@ int main(){
 
 	int testValue = 0; // Change this value to test the second scenario
 
-	pthread_t p1, p2;
+	pthread_t p1, p2, p3, p4;
 
-	if (testValue ==0){
+		printf("%s\n", "------------------With Locks------------------------");
 		printf("Testing Insert and Delete with locks\n");
 		pthread_create(&p1, NULL, test1, list);
 		pthread_create(&p2, NULL, test1, list);
 		// join waits for the threads to finish
 		pthread_join(p1, NULL);
 		pthread_join(p2, NULL);
-		printf("Ended successfully!!\n");
-	}
-	else{
+		printf("Ended successfully!!\n\n");
+
+
+		printf("%s\n", "------------------Without Locks------------------------");
 		printf("Testing Insert and Delete without locks\n");
 		printf("A segmentation fault error may occur at any time due to \n");
 		printf("%s\n", "a NULL pointer error caused by an interrupt");
-		pthread_create(&p1, NULL, test2, list);
-		pthread_create(&p2, NULL, test2, list);
+		pthread_create(&p3, NULL, test2, list);
+		pthread_create(&p4, NULL, test2, list);
 		// join waits for the threads to finish
-		pthread_join(p1, NULL);
-		pthread_join(p2, NULL);
+		pthread_join(p3, NULL);
+		pthread_join(p4, NULL);
 		printf("%s\n", "This may not be printed!!");
-	}
+	
 	
 }

@@ -174,20 +174,24 @@ int main(int argc, char const *argv[])
 	Queue_Init(queue);
 
 
-	int testValue = 1; // Change this value for the different tests
+	volatile int testValue = 0; // Change this value for the different tests
 
 	pthread_t p1, p2;
 
-	if (testValue ==0){
-		printf("Testing Enqueue and Dequeue with locks\n Two threads used.\n");
+	if (testValue == 0){
+		printf("Testing Enqueue and Dequeue with locks (Two threads used).......\n");
 		pthread_create(&p1, NULL, test1, queue);
 		pthread_create(&p2, NULL, test1, queue);
 		// join waits for the threads to finish
 		pthread_join(p1, NULL);
 		pthread_join(p2, NULL);
 		printf("Ended successfully!!\n");
+		printf("%s\n", "Change testValue to test without locks, and delete");
+
+
+
 	}
-	else if (testValue==1){
+	else if (testValue == 1){
 		printf("Testing Enqueue and Dequeue without locks\n");
 		printf("A segmentation fault may happen because of a possible\n");
 		printf("%s\n", " NULL pointer error caused by an interrupt....");
